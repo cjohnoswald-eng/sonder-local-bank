@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cabiles Local Bank</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href__="Resources/test.css">
+</head>
+<body class="bg-slate-50 min-h-screen font-sans text-slate-900">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center gap-4">
+            <div class="flex items-center gap-2">
+                <img src="Resources/logo.png" alt="Cabiles Local Bank Logo" class="w-10 h-10 object-contain">
+                <div class="flex flex-col leading-none">
+                    <span class="text-xl font-bold text-blue-700">Cabiles Local Bank</span>
+                    <span class="text-xs text-slate-500 font-medium mt-0.5">Other banks offer loans. Cabiles Local Bank offers leverage.</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-6 mb-16">
+
+        <div class="lg:col-span-3">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sticky top-24">
+                <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 px-2">Menu Options</h2>
+
+                <nav class="space-y-1">
+                    <button onclick="showSection('create')" class="menu-btn w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors active-nav">
+                        1. Create Account
+                    </button>
+                    <button onclick="showSection('transact')" class="menu-btn w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+                        2. Deposit / Withdraw
+                    </button>
+                    <button onclick="showSection('check')" class="menu-btn w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+                        3. Check Balance
+                    </button>
+                    <button onclick="showSection('list')" class="menu-btn w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+                        4. All Accounts
+                    </button>
+                </nav>
+
+                <div class="mt-6 pt-6 border-t border-slate-100">
+                    <button onclick="exitSystem()" class="w-full flex items-center text-left px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                        <i data-lucide="log-out" class="w-4 h-4 mr-2"></i>
+                        5. Exit System
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="lg:col-span-9" id="main-content">
+
+            <div id="create" class="section block">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm">
+                    <div class="p-6 border-b border-slate-200">
+                        <h2 class="text-xl font-semibold flex items-center gap-2">
+                            <i data-lucide="user-plus" class="w-5 h-5 text-blue-600"></i>
+                            Create New Account
+                        </h2>
+                        <p class="text-sm text-slate-500 mt-1">Enter customer details to open a new bank account.</p>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium leading-none">Account Number</label>
+                            <input type="text" id="new-acc-num" class="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="e.g. 1001">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium leading-none">Account Holder Name</label>
+                            <input type="text" id="new-acc-name" class="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="e.g. John Oswald">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium leading-none">Initial Balance (₱)</label>
+                            <input type="number" id="new-acc-bal" class="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="0.00" min="0">
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <button onclick="createAccount()" class="w-full bg-blue-600 text-white hover:bg-blue-700 h-10 px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                            Create Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="transact" class="section hidden">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm">
+                    <div class="p-6 border-b border-slate-200">
+                        <h2 class="text-xl font-semibold flex items-center gap-2">
+                            <i data-lucide="banknote" class="w-5 h-5 text-blue-600"></i>
+                            Deposit / Withdraw
+                        </h2>
+                        <p class="text-sm text-slate-500 mt-1">Manage funds for an existing account.</p>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        <div class="grid w-full grid-cols-2 bg-slate-100 p-1 rounded-lg">
+                            <button onclick="setTransMode('deposit')" id="tab-deposit" class="text-sm font-medium px-3 py-1.5 rounded-md bg-white shadow-sm transition-all text-slate-900">Deposit</button>
+                            <button onclick="setTransMode('withdraw')" id="tab-withdraw" class="text-sm font-medium px-3 py-1.5 rounded-md text-slate-500 transition-all hover:text-slate-900">Withdraw</button>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium leading-none">Account Number</label>
+                                <input type="text" id="trans-acc-num" class="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="e.g. 1001">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium leading-none">Amount (₱)</label>
+                                <input type="number" id="trans-amount" class="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="0.00">
+                            </div>
+                            <button onclick="handleTransaction()" id="trans-btn" class="w-full bg-green-600 text-white hover:bg-green-700 h-10 px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                                Deposit Funds
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="check" class="section hidden">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm">
+                    <div class="p-6 border-b border-slate-200">
+                        <h2 class="text-xl font-semibold flex items-center gap-2">
+                            <i data-lucide="wallet" class="w-5 h-5 text-blue-600"></i>
+                            Check Balance
+                        </h2>
+                        <p class="text-sm text-slate-500 mt-1">Instantly check available balance.</p>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        <div class="flex gap-2">
+                            <input type="text" id="check-acc-num" class="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Enter Account Number">
+                            <button onclick="checkBalance()" class="bg-slate-900 text-white hover:bg-slate-800 h-10 px-4 py-2 rounded-md text-sm font-medium">
+                                Check
+                            </button>
+                        </div>
+                        <div id="balance-display" class="hidden pt-4 border-t border-slate-100 text-center">
+                            <div class="bg-slate-50 p-6 rounded-lg border border-slate-100">
+                                <div class="flex items-center justify-center gap-2 text-slate-500 mb-2">
+                                    <i data-lucide="user" class="w-4 h-4"></i>
+                                    <span id="bal-name">Name</span>
+                                </div>
+                                <div class="text-4xl font-bold text-blue-600" id="bal-amount">₱0.00</div>
+                                <div class="text-sm text-slate-500 mt-1">Available Balance</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="list" class="section hidden">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm h-full">
+                    <div class="p-6 border-b border-slate-200 flex justify-between items-center">
+                        <div>
+                            <h2 class="text-xl font-semibold flex items-center gap-2">
+                                <i data-lucide="users" class="w-5 h-5 text-blue-600"></i>
+                                All Accounts
+                            </h2>
+                            <p class="text-sm text-slate-500 mt-1">View and search all registered accounts.</p>
+                        </div>
+                        <button onclick="renderTable()" class="p-2 hover:bg-slate-100 rounded-full transition-colors">
+                            <i data-lucide="refresh-cw" class="w-4 h-4 text-slate-500"></i>
+                        </button>
+                    </div>
+                    <div class="p-4 bg-slate-50 border-b border-slate-200">
+                        <div class="relative">
+                            <i data-lucide="search" class="absolute left-3 top-3 h-4 w-4 text-slate-400"></i>
+                            <input type="text" id="search-input" oninput="renderTable()" class="pl-9 flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Search by Name or Account Number...">
+                        </div>
+                    </div>
+                    <div class="p-0">
+                        <table class="w-full text-sm text-left">
+                            <thead class="bg-slate-50 text-slate-500 font-medium">
+                                <tr>
+                                    <th class="px-6 py-3">Account No.</th>
+                                    <th class="px-6 py-3">Holder Name</th>
+                                    <th class="px-6 py-3 text-right">Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody id="accounts-body" class="divide-y divide-slate-100">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="exit-screen" class="hidden fixed inset-0 bg-white z-[100] flex flex-col items-center justify-center space-y-4">
+            <h1 class="text-3xl font-bold text-slate-800">Thank You!</h1>
+            <p class="text-slate-500">Exiting system safely...</p>
+            <div class="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+
+    </div>
+
+    <footer class="fixed bottom-0 left-0 right-0 py-3 bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
+            © 2025 Cabiles Local Bank. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="Resources/test.js"></script>
+</body>
+</html>
